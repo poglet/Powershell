@@ -1,0 +1,29 @@
+$Computer = "POGLET"
+
+# DEFINE PROPERTIES: win32_bios
+    $PCBios = Get-WmiObject -computername $Computer -Class win32_bios | select-object *
+
+# DEFINE PROPERTIES: Win32_OperatingSystem
+    $OSProperties = Get-WMIObject -computername $Computer -Class Win32_OperatingSystem | Select-Object -Property *
+
+$OSCaption = $OSproperties.Caption
+
+# DEFINE PROPERTIES: Win32_ComputerSystem
+    $PCSystem = Get-WmiObject -computername $Computer -Class Win32_ComputerSystem  | select-object *
+
+# DEFINE PROPERTIES: Win32_DiskDrive
+    $PCPartition = Get-WmiObject -computername $Computer Win32_DiskDrive   | select-object *
+
+# DEFINE PROPERTIES: Win32_LogicalDisk
+    $PCHarddrive = Get-WmiObject -computername $Computer Win32_LogicalDisk
+
+
+# DEFINE PROPERTIES: Win32_NetworkAdapterConfiguration
+    $PCNetwork = Get-WMIObject -Class Win32_NetworkAdapterConfiguration| Select-Object * | Where-Object {$_.Description -Like 'Intel*'}
+
+
+# Share Information:
+Get-WMIObject -Class Win32_Share
+
+# View Running Drivers
+Get-WMIObject -Class Win32_SystemDriver | Where-Object {$_.State -Like 'Running'} | Select-Object Name, DisplayName |Format-Table -AutoSize
